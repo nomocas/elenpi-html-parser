@@ -22,6 +22,7 @@
     "prepush": "npm test",
     "commitmsg": "validate-commit-msg",
     "cmtz": "git-cz",
+    "prerelease": "npm test",
     "release": "standard-version"
   },
   "nyc": {

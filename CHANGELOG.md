@@ -11,34 +11,3 @@ All notable changes to this project will be documented in this file. See [standa
 * **base:** finalise extraction and first tests ([d27d7eb](https://github.com/nomocas/elenpi-html-parser/commit/d27d7eb))
 * **dependency:** update elenpi version to 0.5.1 ([f4524d0](https://github.com/nomocas/elenpi-html-parser/commit/f4524d0))
 
-
-
-<a name="0.1.1"></a>
-## [0.1.1](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/compare/v0.1.0...v0.1.1) (2017-05-11)
-
-
-### Bug Fixes
-
-* **package:** udate dependencies ([4d61e8a](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/4d61e8a))
-* **package:** udate dependencies ([14a8748](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/14a8748))
-
-
-
-<a name="0.1.0"></a>
-# 0.1.0 (2017-04-16)
-
-
-### Bug Fixes
-
-* **build:** add commonjs and nordeResolver in rollup.config ([64c18ad](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/64c18ad))
-* **build:** add unassert in babelrc (production) ([6b0e684](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/6b0e684))
-* **structure:** clean index.js ([ca97d4b](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/ca97d4b))
-* **structure:** clean main test file ([1356cff](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/1356cff))
-* **structure:** remove unneeded file ([1f812e7](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/1f812e7))
-* **test:** clean karma conf build name ([8548b7c](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/8548b7c))
-
-
-### Features
-
-* **build:** add coveralls and update dependencies ([aa8d809](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/aa8d809))
-* **build:** add esdoc ([d11d58f](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/commit/d11d58f))
