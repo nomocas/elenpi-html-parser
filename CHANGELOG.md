@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.1"></a>
+## 1.0.1 (2017-11-14)
+
+
+### Bug Fixes
+
+* **base:** finalise extraction and first tests ([d27d7eb](https://github.com/nomocas/elenpi-html-parser/commit/d27d7eb))
+* **dependency:** update elenpi version to 0.5.1 ([f4524d0](https://github.com/nomocas/elenpi-html-parser/commit/f4524d0))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/nomocas/es6-rb-mc-k-i-boilerplate/compare/v0.1.0...v0.1.1) (2017-05-11)
 
