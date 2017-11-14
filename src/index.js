@@ -34,7 +34,7 @@ const rules = {
 	// tag children (or Fragment)
 	children: r
 		.zeroOrMore({
-			pushTo: 'children',
+			pushTo: 'childNodes',
 			rule: r.oneOf('comment', 'text', 'tag')
 		}),
 
@@ -107,13 +107,13 @@ const rules = {
 const parser = new Parser(rules, 'children');
 
 parser.parseDocument = function parseDoc(doc, opts = {}) {
-	return this.parse(doc, 'document', null, {
+	return this.parse(doc, 'document', {}, {
 		options: opts
 	});
 };
 
 parser.parseFragment = function parseFrag(doc, opts = {}) {
-	return this.parse(doc, 'children', null, {
+	return this.parse(doc, 'children', {}, {
 		options: opts
 	});
 };

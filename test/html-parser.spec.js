@@ -11,7 +11,7 @@ const expect = chai.expect;
 chai.should();
 
 describe("HTML5 parse", () => {
-	
+
 	describe("tag", () => {
 		const res = parser.parse('<div></div>', 'tag');
 		it("should", () => {
@@ -52,10 +52,10 @@ describe("HTML5 parse", () => {
 		const res = parser.parse('<meta><title>ho</title>', 'children');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				children: [{
+				childNodes: [{
 					tagName: "meta"
 				}, {
-					children: [{
+					childNodes: [{
 						textValue: "ho"
 					}],
 					tagName: "title"
@@ -69,7 +69,7 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				tagName: "div",
-				children: [{
+				childNodes: [{
 					textValue: "hello"
 				}]
 			});
@@ -95,11 +95,11 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				tagName: "div",
-				children: [{
+				childNodes: [{
 					textValue: "hello "
 				}, {
 					tagName: "span",
-					children: [{
+					childNodes: [{
 						textValue: "John"
 					}]
 				}]
@@ -112,11 +112,11 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				tagName: "div",
-				children: [{
+				childNodes: [{
 					textValue: "hello \n\t"
 				}, {
 					tagName: "span",
-					children: [{
+					childNodes: [{
 						textValue: "John"
 					}]
 				}]
@@ -129,7 +129,7 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				tagName: "div",
-				children: [{
+				childNodes: [{
 					textValue: "hello "
 				}, {
 					tagName: "script",
@@ -144,7 +144,7 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				tagName: "div",
-				children: [{
+				childNodes: [{
 					textValue: "hello "
 				}, {
 					tagName: "script",
@@ -177,13 +177,13 @@ describe("HTML5 parse", () => {
 		const res = parser.parse(text, 'children');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				children: [{
+				childNodes: [{
 					tagName: "div",
 					attributes: {
 						id: "hello"
 					},
 					classes: ["reu"],
-					children: [{
+					childNodes: [{
 						textValue: "foo "
 					}, {
 						tagName: "br"
@@ -192,7 +192,7 @@ describe("HTML5 parse", () => {
 					}, {
 						tagName: "span",
 						classes: ["blu"],
-						children: [{
+						childNodes: [{
 							textValue: " bar "
 						}]
 					}]
@@ -222,14 +222,15 @@ describe("HTML5 parse", () => {
 
 		it("should", () => {
 			expect(res).to.deep.equals({
-				children: [{
+				childNodes: [{
 					tagName: "script",
 					content: "\n\t\tdocument.write('<script>bouh</script>');\n\t\tdocument.write('<script>\"bouh\\'</script>');\n\t\tdocument.write(\"<script>bouh</script>\");\n\t\tdocument.write(\"<script>'bouh\\\"</script>\");\n\t\t"
 				},
 				{
 					tagName: "script",
 					content: ""
-				}]
+				}
+				]
 			});
 		});
 	});
@@ -275,18 +276,18 @@ describe("HTML5 parse", () => {
 		const res = parser.parse(doc, 'document');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				children: [{
+				childNodes: [{
 					tagName: "html",
-					children: [{
+					childNodes: [{
 						tagName: "head",
-						children: [{
+						childNodes: [{
 							tagName: "meta",
 							attributes: {
 								charset: "utf-8"
 							}
 						}, {
 							tagName: "title",
-							children: [{
+							childNodes: [{
 								textValue: "elenpi mocha tests"
 							}]
 						}, {
@@ -332,17 +333,17 @@ describe("HTML5 parse", () => {
 						}]
 					}, {
 						tagName: "body",
-						children: [{
+						childNodes: [{
 							tagName: "h2",
 							attributes: {
 								style: "margin-left:30px;"
 							},
-							children: [{
+							childNodes: [{
 								tagName: "a",
 								attributes: {
 									href: "https://github.com/nomocas/elenpi"
 								},
-								children: [{
+								childNodes: [{
 									textValue: "elenpi"
 								}]
 							}, {
