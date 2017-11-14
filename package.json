@@ -44,7 +44,7 @@
   "author": "Gilles Coomans",
   "license": "MIT",
   "dependencies": {
-    "elenpi": "^0.5.0"
+    "elenpi": "^0.5.1"
   },
   "devDependencies": {
     "assert": "^1.4.1",
