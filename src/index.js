@@ -82,10 +82,8 @@ const rules = {
 			const attrName = cap[1],
 				value = (cap[3] !== undefined) ? cap[3] : ((cap[2] !== undefined) ? cap[2] : '');
 			obj.attributes = obj.attributes || {};
-			if (attrName !== 'class') {
+			if (attrName !== 'class' || value)
 				obj.attributes[attrName] = value;
-			} else if (value)
-				obj.attributes.class = value;
 		}),
 
 	innerScript: r
