@@ -10,7 +10,6 @@ const r = elenpi.Rule.initializer,
 	Parser = elenpi.Parser,
 	exec = Parser.exec,
 	openTags = /^(br|input|area|base|col|command|embed|hr|img|link|meta|param|source|track|wbr)/,
-	// onlySpace = /^\s+$/,
 	rawContentTags = /^(?:script|style|code)/;
 
 const rules = {
@@ -42,13 +41,8 @@ const rules = {
 		}),
 
 	text: r.terminal(/^[^<]+/, (env, obj, cap) => {
-		const val = cap[0];
-		// if (onlySpace.test(val))
-		// obj.skip = true;
-		// else {
 		obj.nodeName = '#text';
-		obj.value = val;
-		// }
+		obj.value = cap[0];
 	}),
 
 	// normal tag (including raw tags)
