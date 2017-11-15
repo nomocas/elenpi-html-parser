@@ -1,6 +1,6 @@
 {
   "name": "elenpi-html-parser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simplest, lightest, most understandable and tweakable html-parser",
   "main": "dist/bundles/index.js",
   "module": "dist/bundles/index.mjs",
