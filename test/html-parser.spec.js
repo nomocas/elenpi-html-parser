@@ -56,7 +56,8 @@ describe("HTML5 parse", () => {
 					nodeName: "meta"
 				}, {
 					childNodes: [{
-						textValue: "ho"
+						nodeName: '#text',
+						value: "ho"
 					}],
 					nodeName: "title"
 				}]
@@ -70,7 +71,8 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				childNodes: [{
-					textValue: "hello"
+					nodeName: '#text',
+					value: "hello"
 				}]
 			});
 		});
@@ -83,9 +85,9 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				attributes: {
-					id: "reu"
+					id: "reu",
+					class: "hello"
 				},
-				classes: ["hello"]
 			});
 		});
 	});
@@ -96,11 +98,13 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				childNodes: [{
-					textValue: "hello "
+					nodeName: '#text',
+					value: "hello "
 				}, {
 					nodeName: "span",
 					childNodes: [{
-						textValue: "John"
+						nodeName: '#text',
+						value: "John"
 					}]
 				}]
 			});
@@ -113,13 +117,20 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				childNodes: [{
-					textValue: "hello \n\t"
+					nodeName: '#text',
+					value: "hello \n\t"
 				}, {
 					nodeName: "span",
 					childNodes: [{
-						textValue: "John"
+						nodeName: '#text',
+						value: "John"
 					}]
-				}]
+				},
+				{
+					nodeName: "#text",
+					value: "\n"
+				}
+				]
 			});
 		});
 	});
@@ -130,7 +141,8 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				childNodes: [{
-					textValue: "hello "
+					nodeName: '#text',
+					value: "hello "
 				}, {
 					nodeName: "script",
 					content: "var a = 12 < 15;"
@@ -145,7 +157,8 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
 				childNodes: [{
-					textValue: "hello "
+					nodeName: '#text',
+					value: "hello "
 				}, {
 					nodeName: "script",
 					content: "var a = 12 < 15;\nvar b = 0; "
@@ -158,7 +171,8 @@ describe("HTML5 parse", () => {
 		const res = parser.parse('<!-- bloupi -->', 'comment');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				comment: " bloupi "
+				nodeName: '#comment',
+				data: " bloupi "
 			});
 		});
 	});
@@ -167,7 +181,8 @@ describe("HTML5 parse", () => {
 		const res = parser.parse('<!-- \rbloupi\n -->', 'comment');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				comment: ' \rbloupi\n '
+				nodeName: '#comment',
+				data: ' \rbloupi\n '
 			});
 		});
 	});
@@ -175,31 +190,44 @@ describe("HTML5 parse", () => {
 	describe("full line", () => {
 		const text = '<div id="hello" class=reu >foo <br> <!-- hello \n--> <span class="blu" > bar </span></div><home /> hello <script type="text/javascript">var a = 12, \nb = a < 14;</script>';
 		const res = parser.parse(text, 'fragment');
+
 		it("should", () => {
 			expect(res).to.deep.equals({
 				childNodes: [{
 					nodeName: "div",
 					attributes: {
-						id: "hello"
+						id: "hello",
+						class: "reu"
 					},
-					classes: ["reu"],
 					childNodes: [{
-						textValue: "foo "
+						nodeName: '#text',
+						value: "foo "
 					}, {
 						nodeName: "br"
 					}, {
-						comment: " hello \n"
+						nodeName: "#text",
+						value: " "
+					}, {
+						nodeName: '#comment',
+						data: " hello \n"
+					}, {
+						nodeName: "#text",
+						value: " "
 					}, {
 						nodeName: "span",
-						classes: ["blu"],
+						attributes: {
+							class: "blu"
+						},
 						childNodes: [{
-							textValue: " bar "
+							nodeName: '#text',
+							value: " bar "
 						}]
 					}]
 				}, {
 					nodeName: "home"
 				}, {
-					textValue: " hello "
+					nodeName: '#text',
+					value: " hello "
 				}, {
 					nodeName: "script",
 					attributes: {
@@ -274,67 +302,134 @@ describe("HTML5 parse", () => {
 </html>`;
 
 		const res = parser.parse(doc, 'document');
+
 		it("should", () => {
 			expect(res).to.deep.equals({
 				childNodes: [{
 					nodeName: "html",
 					childNodes: [{
+						nodeName: "#text",
+						value: "\n\n\t"
+					},
+					{
 						nodeName: "head",
 						childNodes: [{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "meta",
 							attributes: {
 								charset: "utf-8"
 							}
-						}, {
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "title",
 							childNodes: [{
-								textValue: "elenpi mocha tests"
+								nodeName: "#text",
+								value: "elenpi mocha tests"
 							}]
-						}, {
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "link",
 							attributes: {
 								rel: "stylesheet",
 								href: "./test/mocha.css"
 							}
-						}, {
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "style",
 							content: "\n\t\t\t#fixture {\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -9999;\n\t\t\t\tleft: -9999;\n\t\t\t}\n\t\t"
-						}, {
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "script",
-							content: "",
 							attributes: {
 								type: "text/javascript",
 								src: "./index.js"
-							}
-						}, {
+							},
+							content: ""
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
+							nodeName: "script",
 							attributes: {
 								src: "./test/chai.js"
 							},
-							content: "",
-							nodeName: "script"
-						}, {
+							content: ""
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
+							nodeName: "script",
 							attributes: {
 								src: "./test/mocha.js"
 							},
-							content: "",
-							nodeName: "script"
-						}, {
-							content: "\n\t\t\tmocha.setup(\"bdd\");\n\t\t",
-							nodeName: "script"
-						}, {
+							content: ""
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
+							nodeName: "script",
+							content: "\n\t\t\tmocha.setup(\"bdd\");\n\t\t"
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
+							nodeName: "script",
 							attributes: {
 								src: "./test/test.js"
 							},
-							content: "",
-							nodeName: "script"
-						}, {
-							content: "\n\t\t\twindow.onload = function() {\n\t\t\t\tmocha.run()\n\t\t\t};\n\t\t",
-							nodeName: "script"
+							content: ""
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
+							nodeName: "script",
+							content: "\n\t\t\twindow.onload = function() {\n\t\t\t\tmocha.run()\n\t\t\t};\n\t\t"
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t"
 						}]
-					}, {
-
+					},
+					{
+						nodeName: "#text",
+						value: "\n\n\t"
+					},
+					{
 						nodeName: "body",
 						childNodes: [{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "h2",
 							attributes: {
 								style: "margin-left:30px;"
@@ -345,17 +440,33 @@ describe("HTML5 parse", () => {
 									href: "https://github.com/nomocas/elenpi"
 								},
 								childNodes: [{
-									textValue: "elenpi"
+									nodeName: "#text",
+									value: "elenpi"
 								}]
-							}, {
-								textValue: " tests"
+							},
+							{
+								nodeName: "#text",
+								value: " tests"
 							}]
-						}, {
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t\t"
+						},
+						{
 							nodeName: "div",
 							attributes: {
 								id: "mocha"
 							}
+						},
+						{
+							nodeName: "#text",
+							value: "\n\t"
 						}]
+					},
+					{
+						nodeName: "#text",
+						value: "\n"
 					}]
 				}]
 			});
