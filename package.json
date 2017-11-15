@@ -18,7 +18,7 @@
     "cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/*.js",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls",
     "prepublish": "npm test",
-    "precommit": "npm run prebuild",
+    "precommit": "npm test",
     "prepush": "npm test",
     "commitmsg": "validate-commit-msg",
     "cmtz": "git-cz",
