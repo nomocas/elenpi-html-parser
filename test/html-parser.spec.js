@@ -187,6 +187,21 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+
+	describe("comment with nested comment", () => {
+		const res = parser.parse(`
+	<!-- hop --><template><!-- hip --></template>
+`, 'fragment');
+
+		console.log('res', res);
+
+		it("should", () => {
+		});
+	});
+
+
+
+
 	describe("full line", () => {
 		const text = '<div id="hello" class=reu >foo <br> <!-- hello \n--> <span class="blu" > bar </span></div><home /> hello <script type="text/javascript">var a = 12, \nb = a < 14;</script>';
 		const res = parser.parse(text, 'fragment');
@@ -417,7 +432,8 @@ describe("HTML5 parse", () => {
 						{
 							nodeName: "#text",
 							value: "\n\t"
-						}]
+						}
+						]
 					},
 					{
 						nodeName: "#text",
@@ -447,7 +463,8 @@ describe("HTML5 parse", () => {
 							{
 								nodeName: "#text",
 								value: " tests"
-							}]
+							}
+							]
 						},
 						{
 							nodeName: "#text",
@@ -462,12 +479,14 @@ describe("HTML5 parse", () => {
 						{
 							nodeName: "#text",
 							value: "\n\t"
-						}]
+						}
+						]
 					},
 					{
 						nodeName: "#text",
 						value: "\n"
-					}]
+					}
+					]
 				}]
 			});
 		});
