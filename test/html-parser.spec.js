@@ -193,9 +193,29 @@ describe("HTML5 parse", () => {
 	<!-- hop --><template><!-- hip --></template>
 `, 'fragment');
 
-		console.log('res', res);
-
 		it("should", () => {
+			expect(res).to.deep.equals({
+				childNodes: [{
+					nodeName: '#text',
+					value: '\n\t'
+				},
+				{
+					nodeName: '#comment',
+					data: ' hop '
+				},
+				{
+					nodeName: 'template',
+					childNodes: [{
+						nodeName: '#comment',
+						data: ' hip '
+					}]
+				},
+				{
+					nodeName: '#text',
+					value: '\n'
+				}
+				]
+			});
 		});
 	});
 
@@ -453,12 +473,12 @@ describe("HTML5 parse", () => {
 							childNodes: [{
 								nodeName: "a",
 								attributes: {
-									href: "https://github.com/nomocas/elenpi"
-								},
+										href: "https://github.com/nomocas/elenpi"
+									},
 								childNodes: [{
-									nodeName: "#text",
-									value: "elenpi"
-								}]
+										nodeName: "#text",
+										value: "elenpi"
+									}]
 							},
 							{
 								nodeName: "#text",
