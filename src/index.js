@@ -48,7 +48,7 @@ const rules = {
 	// normal tag (including raw tags)
 	tag: r
 		.terminal(/^<([\w-_:]+)\s*/, (env, obj, cap) => obj.nodeName = cap[1]) // start tag
-		.zeroOrMore('attributes')
+		.zeroOrMore('attribute')
 		.oneOf(
 			r.char('>') // open tag or tag with children
 			.done((env, obj, lastIndex) => {
@@ -77,7 +77,7 @@ const rules = {
 
 	// attrName | attrName="... ..." | attrName=something | attrName={{ .. }} | attrName={ .. }
 	// with an optional space (\s*) after equal sign (if any).
-	attributes: r
+	attribute: r
 		.terminal(/^([\w-_]+)\s*(?:=\s*("([^"]*)"|[\w-_]+))?\s*/, (env, obj, cap) => {
 			const attrName = cap[1],
 				value = (cap[3] !== undefined) ? cap[3] : ((cap[2] !== undefined) ? cap[2] : '');
