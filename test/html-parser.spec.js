@@ -187,6 +187,19 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+	describe("comment with new line", () => {
+		const res = parser.parse('<!-- should include critical CSS (https://github.com/addyosmani/critical) -->', 'comment');
+		it("should", () => {
+			expect(res).to.deep.equals({
+				nodeName: '#comment',
+				data: ' should include critical CSS (https://github.com/addyosmani/critical) '
+			});
+		});
+	});
+
+
+	
+
 
 	describe("comment with nested comment", () => {
 		const res = parser.parse(`
@@ -342,170 +355,173 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				childNodes: [{
 					nodeName: "html",
-					childNodes: [{
-						nodeName: "#text",
-						value: "\n\n\t"
-					},
-					{
-						nodeName: "head",
-						childNodes: [{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "meta",
-							attributes: {
-								charset: "utf-8"
-							}
-						},
+					childNodes: [
 						{
 							nodeName: "#text",
-							value: "\n\t\t"
+							value: "\n\n\t"
 						},
 						{
-							nodeName: "title",
+							nodeName: "head",
+							childNodes: [
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "meta",
+									attributes: {
+										charset: "utf-8"
+									}
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "title",
+									childNodes: [{
+										nodeName: "#text",
+										value: "elenpi mocha tests"
+									}]
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "link",
+									attributes: {
+										rel: "stylesheet",
+										href: "./test/mocha.css"
+									}
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "style",
+									content: "\n\t\t\t#fixture {\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -9999;\n\t\t\t\tleft: -9999;\n\t\t\t}\n\t\t"
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									attributes: {
+										type: "text/javascript",
+										src: "./index.js"
+									},
+									content: ""
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									attributes: {
+										src: "./test/chai.js"
+									},
+									content: ""
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									attributes: {
+										src: "./test/mocha.js"
+									},
+									content: ""
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									content: "\n\t\t\tmocha.setup(\"bdd\");\n\t\t"
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									attributes: {
+										src: "./test/test.js"
+									},
+									content: ""
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t\t"
+								},
+								{
+									nodeName: "script",
+									content: "\n\t\t\twindow.onload = function() {\n\t\t\t\tmocha.run()\n\t\t\t};\n\t\t"
+								},
+								{
+									nodeName: "#text",
+									value: "\n\t"
+								}
+							]
+						},
+						{
+							nodeName: "#text",
+							value: "\n\n\t"
+						},
+						{
+							nodeName: "body",
 							childNodes: [{
 								nodeName: "#text",
-								value: "elenpi mocha tests"
-							}]
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "link",
-							attributes: {
-								rel: "stylesheet",
-								href: "./test/mocha.css"
-							}
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "style",
-							content: "\n\t\t\t#fixture {\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -9999;\n\t\t\t\tleft: -9999;\n\t\t\t}\n\t\t"
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							attributes: {
-								type: "text/javascript",
-								src: "./index.js"
+								value: "\n\t\t"
 							},
-							content: ""
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							attributes: {
-								src: "./test/chai.js"
-							},
-							content: ""
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							attributes: {
-								src: "./test/mocha.js"
-							},
-							content: ""
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							content: "\n\t\t\tmocha.setup(\"bdd\");\n\t\t"
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							attributes: {
-								src: "./test/test.js"
-							},
-							content: ""
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "script",
-							content: "\n\t\t\twindow.onload = function() {\n\t\t\t\tmocha.run()\n\t\t\t};\n\t\t"
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t"
-						}
-						]
-					},
-					{
-						nodeName: "#text",
-						value: "\n\n\t"
-					},
-					{
-						nodeName: "body",
-						childNodes: [{
-							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "h2",
-							attributes: {
-								style: "margin-left:30px;"
-							},
-							childNodes: [{
-								nodeName: "a",
+							{
+								nodeName: "h2",
 								attributes: {
-										href: "https://github.com/nomocas/elenpi"
+									style: "margin-left:30px;"
+								},
+								childNodes: [
+									{
+										nodeName: "a",
+										attributes: {
+											href: "https://github.com/nomocas/elenpi"
+										},
+										childNodes: [{
+											nodeName: "#text",
+											value: "elenpi"
+										}]
 									},
-								childNodes: [{
+									{
 										nodeName: "#text",
-										value: "elenpi"
-									}]
+										value: " tests"
+									}
+								]
 							},
 							{
 								nodeName: "#text",
-								value: " tests"
+								value: "\n\t\t"
+							},
+							{
+								nodeName: "div",
+								attributes: {
+									id: "mocha"
+								}
+							},
+							{
+								nodeName: "#text",
+								value: "\n\t"
 							}
 							]
 						},
 						{
 							nodeName: "#text",
-							value: "\n\t\t"
-						},
-						{
-							nodeName: "div",
-							attributes: {
-								id: "mocha"
-							}
-						},
-						{
-							nodeName: "#text",
-							value: "\n\t"
+							value: "\n"
 						}
-						]
-					},
-					{
-						nodeName: "#text",
-						value: "\n"
-					}
 					]
 				}]
 			});

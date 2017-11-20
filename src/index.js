@@ -19,7 +19,7 @@ const rules = {
 		.one('fragment')
 		.space(),
 
-	comment: r.terminal(/^<!--([\s\w]*)(?=-->)-->/ /*/^<!--([\s\S]*)?(?=-->)-->/*/, (env, obj, cap) => {
+	comment: r.terminal(/^<!--([.\s\S\r]*?)(?=-->)-->/ /*/^<!--([\s\S]*)?(?=-->)-->/*/, (env, obj, cap) => {
 		obj.nodeName = '#comment';
 		obj.data = cap[1];
 	}),
