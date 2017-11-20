@@ -1,12 +1,13 @@
 {
   "name": "elenpi-html-parser",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simplest, lightest, most understandable and tweakable html-parser",
   "main": "dist/bundles/index.js",
   "module": "dist/bundles/index.mjs",
   "jsnext:main": "dist/bundles/index.mjs",
   "scripts": {
-    "prebuild": "eslint src test",
+    "lint": "eslint src test",
+    "prebuild": "npm run lint",
     "build": "npm run build:bundle && npm run build:es5",
     "build:bundle": "rollup -c && uglifyjs dist/bundles/index.js -m -o dist/bundles/index.min.js",
     "build:bundle:watch": "rollup -c -w",
