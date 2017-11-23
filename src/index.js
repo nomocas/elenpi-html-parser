@@ -29,8 +29,9 @@ const rules = {
 		if (obj.nodeName !== cap[1]) {
 			env.errors = env.errors || [];
 			env.errors.push('tag badly closed : ' + cap[1] + ' - (at opening : ' + obj.nodeName + ')');
-		} else if (env.options && env.options.location && rawContentTags.test(obj.nodeName))
+		} else if (env.options && env.options.location) {
 			obj.endContentIndex = startIndex;
+		}
 	}),
 
 	// fragment (or children)
@@ -57,11 +58,13 @@ const rules = {
 				if (openTags.test(obj.nodeName))
 					return; // no children
 
+				if (env.options && env.options.location) {
+					obj.startContentIndex = lastIndex;
+				}
+
 				if (rawContentTags.test(obj.nodeName)) {
 					// get inner script content
 					obj.content = '';
-					if (env.options && env.options.location)
-						obj.startContentIndex = lastIndex;
 					exec(env.parser.rules.innerScript, obj, env);
 				} else
 					// get inner tag content
