@@ -19,7 +19,7 @@ const rules = {
 		.one('fragment')
 		.space(),
 
-	comment: r.terminal(/^<!--([.\s\S\r]*?)(?=-->)-->/ /*/^<!--([\s\S]*)?(?=-->)-->/*/, (env, obj, cap) => {
+	comment: r.terminal(/^<!--([.\s\S\r]*?)(?=-->)-->/, (env, obj, cap) => {
 		obj.nodeName = '#comment';
 		obj.data = cap[1];
 	}),
@@ -102,11 +102,15 @@ const rules = {
 const parser = new Parser(rules, 'fragment');
 
 parser.parseDocument = function parseDoc(doc, options = {}) {
-	return this.parse(doc, 'document', {}, { options });
+	return this.parse(doc, 'document', {}, {
+		options
+	});
 };
 
 parser.parseFragment = function parseFrag(doc, options = {}) {
-	return this.parse(doc, 'fragment', {}, { options });
+	return this.parse(doc, 'fragment', {}, {
+		options
+	});
 };
 
 export default parser;
