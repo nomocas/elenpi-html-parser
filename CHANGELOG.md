@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/nomocas/elenpi-html-parser/compare/v1.0.4...v1.1.0) (2017-11-23)
+
+
+### Features
+
+* **content-position:** add content-position for all tags ([ab788a7](https://github.com/nomocas/elenpi-html-parser/commit/ab788a7))
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/nomocas/elenpi-html-parser/compare/v1.0.3...v1.0.4) (2017-11-20)
 
