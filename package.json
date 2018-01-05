@@ -5,6 +5,9 @@
   "main": "dist/bundles/index.js",
   "module": "dist/bundles/index.mjs",
   "jsnext:main": "dist/bundles/index.mjs",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "lint": "eslint src test",
     "prebuild": "npm run lint",
