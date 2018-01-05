@@ -49,7 +49,7 @@ const rules = {
 	// normal tag (including raw tags)
 	tag: r
 		.terminal(/^<([\w-_:]+)\s*/, (env, obj, cap) => obj.nodeName = cap[1]) // start tag
-		.zeroOrMore('attribute')
+		.zeroOrMore(r.oneOf('handlebars', 'attribute'))
 		.oneOf(
 			r.char('>') // open tag or tag with children
 			.done((env, obj, lastIndex) => {
@@ -84,9 +84,15 @@ const rules = {
 		.terminal(/^([\w-_]+)\s*(?:=\s*("([^"]*)"|[\w-_]+))?\s*/, (env, obj, cap) => {
 			const attrName = cap[1],
 				value = (cap[3] !== undefined) ? cap[3] : ((cap[2] !== undefined) ? cap[2] : '');
-			obj.attributes = obj.attributes || {};
+			obj.attributes = obj.attributes || [];
 			if (attrName !== 'class' || value)
-				obj.attributes[attrName] = value;
+				obj.attributes.push({name:attrName, value});
+		}),
+
+	handlebars: r
+		.terminal(/^({{{?[^}]+}}}?)\s*/, (env, obj, cap) => {
+			obj.attributes = obj.attributes || [];
+			obj.attributes.push({ handlebars:true,  expression: cap[1]});
 		}),
 
 	innerScript: r

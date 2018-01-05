@@ -84,10 +84,13 @@ describe("HTML5 parse", () => {
 		it("should", () => {
 			expect(res).to.deep.equals({
 				nodeName: "div",
-				attributes: {
-					id: "reu",
-					class: "hello"
-				},
+				attributes: [{ 
+					name:"class", 
+					value: "hello"
+				},{
+					name:"id", 
+					value: "reu"
+				}],
 			});
 		});
 	});
@@ -197,7 +200,24 @@ describe("HTML5 parse", () => {
 		});
 	});
 
-
+	describe("variable with handlebars syntax", () => {
+		const res = parser.parse('<div {{ foo }}>bar</div>', 'tag');
+		it("should", () => {
+			expect(res).to.deep.equals({
+				attributes: [{
+					handlebars:true,
+					expression: "{{ foo }}"
+				}],
+				childNodes: [
+				  {
+				    nodeName: "#text",
+				    value: "bar"
+				  }
+				],
+				nodeName: "div"
+			});
+		});
+	});
 	
 
 
@@ -243,10 +263,13 @@ describe("HTML5 parse", () => {
 			expect(res).to.deep.equals({
 				childNodes: [{
 					nodeName: "div",
-					attributes: {
-						id: "hello",
-						class: "reu"
-					},
+					attributes: [{
+						name:"id",
+						value: "hello"
+					}, {
+						name:"class", 
+						value: "reu"
+					}],
 					childNodes: [{
 						nodeName: '#text',
 						value: "foo "
@@ -263,9 +286,10 @@ describe("HTML5 parse", () => {
 						value: " "
 					}, {
 						nodeName: "span",
-						attributes: {
-							class: "blu"
-						},
+						attributes: [{
+							name:"class",
+							value: "blu"
+						}],
 						childNodes: [{
 							nodeName: '#text',
 							value: " bar "
@@ -278,9 +302,10 @@ describe("HTML5 parse", () => {
 					value: " hello "
 				}, {
 					nodeName: "script",
-					attributes: {
-						type: "text/javascript"
-					},
+					attributes: [{
+						name: "type",
+						value: "text/javascript"
+					}],
 					content: "var a = 12, \nb = a < 14;"
 				}]
 			});
@@ -369,9 +394,10 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "meta",
-									attributes: {
-										charset: "utf-8"
-									}
+									attributes: [{
+										name:"charset", 
+										value: "utf-8"
+									}]
 								},
 								{
 									nodeName: "#text",
@@ -390,10 +416,12 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "link",
-									attributes: {
-										rel: "stylesheet",
-										href: "./test/mocha.css"
-									}
+									attributes: [{
+										name:"rel", value: "stylesheet"
+									},
+									{
+										name:"href", value: "./test/mocha.css"
+									}]
 								},
 								{
 									nodeName: "#text",
@@ -409,10 +437,14 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "script",
-									attributes: {
-										type: "text/javascript",
-										src: "./index.js"
+									attributes: [{
+										name:"type", 
+										value: "text/javascript"
 									},
+									{ 
+										name:"src", 
+										value: "./index.js" 
+									}],
 									content: ""
 								},
 								{
@@ -421,9 +453,10 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "script",
-									attributes: {
-										src: "./test/chai.js"
-									},
+									attributes: [{
+										name:"src", 
+										value: "./test/chai.js"
+									}],
 									content: ""
 								},
 								{
@@ -432,9 +465,10 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "script",
-									attributes: {
-										src: "./test/mocha.js"
-									},
+									attributes: [{
+										name:"src",
+										value: "./test/mocha.js"
+									}],
 									content: ""
 								},
 								{
@@ -451,9 +485,10 @@ describe("HTML5 parse", () => {
 								},
 								{
 									nodeName: "script",
-									attributes: {
-										src: "./test/test.js"
-									},
+									attributes: [{
+										name: "src", 
+										value: "./test/test.js"
+									}],
 									content: ""
 								},
 								{
@@ -482,15 +517,17 @@ describe("HTML5 parse", () => {
 							},
 							{
 								nodeName: "h2",
-								attributes: {
-									style: "margin-left:30px;"
-								},
+								attributes: [{
+									name:"style", 
+									value: "margin-left:30px;"
+								}],
 								childNodes: [
 									{
 										nodeName: "a",
-										attributes: {
-											href: "https://github.com/nomocas/elenpi"
-										},
+										attributes: [{
+											name: "href", 
+											value: "https://github.com/nomocas/elenpi"
+										}],
 										childNodes: [{
 											nodeName: "#text",
 											value: "elenpi"
@@ -508,9 +545,10 @@ describe("HTML5 parse", () => {
 							},
 							{
 								nodeName: "div",
-								attributes: {
-									id: "mocha"
-								}
+								attributes: [{
+									name: "id", 
+									value: "mocha"
+								}]
 							},
 							{
 								nodeName: "#text",
