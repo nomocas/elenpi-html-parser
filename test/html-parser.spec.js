@@ -170,6 +170,19 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+	describe("p tag", () => {
+		const res = parser.parse('<p>hello</p>', 'tag');
+		it("should", () => {
+			expect(res).to.deep.equals({
+				nodeName: "p",
+				childNodes: [{
+					nodeName: '#text',
+					value: "hello"
+				}]
+			});
+		});
+	});
+
 	describe("comment", () => {
 		const res = parser.parse('<!-- bloupi -->', 'comment');
 		it("should", () => {
