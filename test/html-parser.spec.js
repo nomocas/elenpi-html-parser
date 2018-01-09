@@ -218,7 +218,25 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
-	
+
+	describe("variable with dot syntax", () => {
+		const res = parser.parse('<div foo.bar>zoo</div>', 'tag');
+		it("should", () => {
+			expect(res).to.deep.equals({
+				attributes: [{
+					name: "foo.bar",
+					value: ""
+				}],
+				childNodes: [
+				  {
+				    nodeName: "#text",
+				    value: "zoo"
+				  }
+				],
+				nodeName: "div"
+			});
+		});
+	});
 
 
 	describe("comment with nested comment", () => {

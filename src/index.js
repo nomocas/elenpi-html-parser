@@ -81,7 +81,7 @@ const rules = {
 	// attrName | attrName="... ..." | attrName=something | attrName={{ .. }} | attrName={ .. }
 	// with an optional space (\s*) after equal sign (if any).
 	attribute: r
-		.terminal(/^([\w-_]+)\s*(?:=\s*("([^"]*)"|[\w-_]+))?\s*/, (env, obj, cap) => {
+		.terminal(/^([\w-_\.]+)\s*(?:=\s*("([^"]*)"|[\w-_\.]+))?\s*/, (env, obj, cap) => {
 			const attrName = cap[1],
 				value = (cap[3] !== undefined) ? cap[3] : ((cap[2] !== undefined) ? cap[2] : '');
 			obj.attributes = obj.attributes || [];
