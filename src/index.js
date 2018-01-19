@@ -10,7 +10,9 @@ const r = elenpi.Rule.initializer,
 	Parser = elenpi.Parser,
 	exec = Parser.exec,
 	openTags = /^(br|input|area|base|col|command|embed|hr|img|link|meta|param|source|track|wbr)/,
-	rawContentTags = /^(?:script|style|code)/;
+	rawContentTags = /^(?:script|style|code)/,
+	doubleString = /^"((?:[^"\\]|\\.)*)"/,
+	singleString = /^'((?:[^'\\]|\\.)*)'/;
 
 const rules = {
 	document: r
@@ -48,9 +50,14 @@ const rules = {
 
 	// normal tag (including raw tags)
 	tag: r
-		.terminal(/^<([\w-_:]+)\s*/, (env, obj, cap) => obj.nodeName = cap[1]) // start tag
-		.zeroOrMore(r.oneOf('handlebars', 'attribute'))
+		.terminal(/^<([\w-_:]+)\s*/, (env, obj, cap) => {
+			obj.nodeName = cap[1];
+		}) // start tag
+		.one('attributes')
 		.oneOf(
+			// strict self closed tag			
+			r.terminal(/^\/>/),
+
 			r.char('>') // open tag or tag with children
 			.done((env, obj, lastIndex) => {
 
@@ -61,7 +68,6 @@ const rules = {
 				if (env.options && env.options.location) {
 					obj.startContentIndex = lastIndex;
 				}
-
 				if (rawContentTags.test(obj.nodeName)) {
 					// get inner script content
 					obj.content = '';
@@ -73,37 +79,64 @@ const rules = {
 				if (!env.error) // close tag
 					exec(env.parser.rules.tagEnd, obj, env);
 			}),
-			// strict self closed tag
-			r.terminal(/^\/>/),
 			r.error('Missing end of tag')
 		),
 
-	// attrName | attrName="... ..." | attrName=something | attrName={{ .. }} | attrName={ .. }
-	// with an optional space (\s*) after equal sign (if any).
+
+	attributes: r.zeroOrMore({
+		rule: r.oneOf('handlebars', 'attribute').space(),
+		pushTo: (env, parent, descriptor) => {
+			parent.attributes = parent.attributes || [];
+			if (descriptor.name === 'class' && !descriptor.value)
+				return;
+			parent.attributes.push(descriptor);
+		}
+	}),
+
 	attribute: r
-		.terminal(/^([\w-_\.]+)\s*(?:=\s*("([^"]*)"|[\w-_\.]+))?\s*/, (env, obj, cap) => {
-			const attrName = cap[1],
-				value = (cap[3] !== undefined) ? cap[3] : ((cap[2] !== undefined) ? cap[2] : '');
-			obj.attributes = obj.attributes || [];
-			if (attrName !== 'class' || value)
-				obj.attributes.push({name:attrName, value});
+		.terminal(/^([\w-_\.]+)\s*/, (env, obj, cap) => {
+			obj.name = cap[1];
+		})
+		.maybeOne('attributeValue'),
+
+	attributeValue: r
+		.terminal(/^\s*=\s*/)
+		.oneOf({
+			rules: [
+				r.terminal(doubleString, (env, obj, cap) => {
+					obj.value = cap[1];
+				}),
+				r.terminal(singleString, (env, obj, cap) => {
+					obj.value = cap[1];
+				}),
+				r.terminal(/^(\/(?!>)|[^\s\/])+/, (env, obj, cap) => {
+					obj.value = cap[0];
+					obj.directValue = true;
+				}),
+			]
 		}),
+
 
 	handlebars: r
 		.terminal(/^({{{?[^}]+}}}?)\s*/, (env, obj, cap) => {
-			obj.attributes = obj.attributes || [];
-			obj.attributes.push({ handlebars:true,  expression: cap[1]});
+			obj.handlebars = true;
+			obj.expression = cap[1];
 		}),
 
 	innerScript: r
 		.zeroOrMore(r.oneOf('textWithoutQuotesOrTags', 'doublestring', 'singlestring', 'templatestring')),
 
 	textWithoutQuotesOrTags: r
-		.terminal(/^(?:[^'"`<]|<[^\/])+/, (env, obj, cap) => obj.content += cap[0]),
+		.terminal(/^([^'"`<]|<(?!\/))+/, (env, obj, cap) => {
+			if (obj.content)
+				obj.content += cap[0];
+			else
+				obj.content = cap[0];
+		}),
 
-	doublestring: r.terminal(/^"((?:[^"\\]|\\.)*)"/, (env, descriptor, cap) => descriptor.content += `"${ cap[1] }"`),
+	doublestring: r.terminal(doubleString, (env, descriptor, cap) => descriptor.content += `"${ cap[1] }"`),
 
-	singlestring: r.terminal(/^'((?:[^'\\]|\\.)*)'/, (env, descriptor, cap) => descriptor.content += `'${ cap[1] }'`),
+	singlestring: r.terminal(singleString, (env, descriptor, cap) => descriptor.content += `'${ cap[1] }'`),
 
 	templatestring: r.terminal(/^`([^`]*)`/, (env, descriptor, cap) => descriptor.content += `\`${ cap[1] }\``)
 };
