@@ -94,7 +94,7 @@ const rules = {
 	}),
 
 	attribute: r
-		.terminal(/^([\w-_\.]+)\s*/, (env, obj, cap) => {
+		.terminal(/^([\w-_\.:]+)\s*/, (env, obj, cap) => {
 			obj.name = cap[1];
 		})
 		.maybeOne('attributeValue'),
