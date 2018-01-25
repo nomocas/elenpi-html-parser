@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/nomocas/elenpi-html-parser/compare/v1.4.0...v1.5.0) (2018-01-25)
+
+
+### Features
+
+* add namespaced attribute's name ([021eb7e](https://github.com/nomocas/elenpi-html-parser/commit/021eb7e))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/nomocas/elenpi-html-parser/compare/v1.3.0...v1.4.0) (2018-01-19)
 
