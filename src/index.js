@@ -124,7 +124,15 @@ const rules = {
 		}),
 
 	innerScript: r
-		.zeroOrMore(r.oneOf('textWithoutQuotesOrTags', 'doublestring', 'singlestring', 'templatestring')),
+		.zeroOrMore(
+			r.oneOf(
+				'textWithoutQuotesOrTags',
+				'doublestring', 
+				'singlestring', 
+				'templatestring', 
+				r.terminal(/^['"`]/, (env, descriptor, cap) => descriptor.content += cap[0])
+			)
+		),
 
 	textWithoutQuotesOrTags: r
 		.terminal(/^([^'"`<]|<(?!\/))+/, (env, obj, cap) => {
