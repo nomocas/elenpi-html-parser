@@ -29,11 +29,10 @@ const rules = {
 	// closing tag
 	tagEnd: r.terminal(/^\s*<\/([\w-_\:]+)\s*>/, (env, obj, cap, startIndex) => {
 		if (obj.nodeName !== cap[1]) {
-			env.errors = env.errors || [];
-			env.errors.push('tag badly closed : ' + cap[1] + ' - (at opening : ' + obj.nodeName + ')');
-		} else if (env.options && env.options.location) {
+			env.error = true;
+			env.errorMessage = 'tag badly closed : ' + cap[1] + ' - (at opening : ' + obj.nodeName + ')';
+		} else if (env.options && env.options.location)
 			obj.endContentIndex = startIndex;
-		}
 	}),
 
 	// fragment (or children)
