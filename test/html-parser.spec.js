@@ -12,7 +12,6 @@ chai.should();
 
 describe("HTML5 parse", () => {
 
-
 	describe("tag", () => {
 		const res = parser.parse('<div></div>', 'tag');
 		it("should", () => {
@@ -96,6 +95,7 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
+
 	describe("open tag + closed just after", () => {
 		const res = parser.parse('<meta><title>ho</title>', 'fragment');
 		it("should", () => {
@@ -113,6 +113,13 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+	describe("tag badly closed will throw", () => {
+		const parse = function() { parser.parse('<bars>hello</bar>', 'tag'); };
+		it("should throw", () => {
+			expect(parse).to.throw();
+		});
+	});
+
 
 	describe("tag with text content", () => {
 		const res = parser.parse('<div>hello</div>', 'tag');
@@ -126,6 +133,7 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
+
 	describe("attribute (double quoted)", () => {
 		const res = parser.parse('class="hello"', 'attribute');
 		it("should", () => {
@@ -135,6 +143,7 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
+
 	describe("attribute (single quoted)", () => {
 		const res = parser.parse('class=\'hello\'', 'attribute');
 		it("should", () => {
@@ -144,6 +153,7 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
+
 	describe("attribute (directValue)", () => {
 		const res = parser.parse('class=hello', 'attribute');
 		it("should", () => {
@@ -159,8 +169,8 @@ describe("HTML5 parse", () => {
 		const res = parser.parse('<div class=hello/>', 'tag');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				nodeName:"div",
-				attributes:[{
+				nodeName: "div",
+				attributes: [{
 					name: "class",
 					value: "hello",
 					directValue: true
@@ -168,7 +178,6 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
-
 
 	describe("attribute with directValue as path", () => {
 		const res = parser.parse('class=./hello/foo', 'attribute');
@@ -185,8 +194,8 @@ describe("HTML5 parse", () => {
 		const res = parser.parse('<div class=./hello/foo />', 'tag');
 		it("should", () => {
 			expect(res).to.deep.equals({
-				nodeName:"div",
-				attributes:[{
+				nodeName: "div",
+				attributes: [{
 					name: "class",
 					value: "./hello/foo",
 					directValue: true
@@ -194,7 +203,6 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
-
 
 	describe("attributes", () => {
 		const res = parser.parse('class="hello" id=reu', 'attributes');
@@ -211,7 +219,6 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
-
 
 	describe("tag with children", () => {
 		const res = parser.parse('<div>hello <span>John</span></div>', 'tag');
@@ -311,6 +318,16 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+	describe("comment with single quote", () => {
+		const res = parser.parse("<!-- don't -->", 'comment');
+		it("should", () => {
+			expect(res).to.deep.equals({
+				nodeName: '#comment',
+				data: " don't "
+			});
+		});
+	});
+
 	describe("comment with new line", () => {
 		const res = parser.parse('<!-- \rbloupi\n -->', 'comment');
 		it("should", () => {
@@ -330,7 +347,6 @@ describe("HTML5 parse", () => {
 			});
 		});
 	});
-
 
 	describe("variable with handlebars syntax", () => {
 		const res = parser.parse('<div {{ foo }}>bar</div>', 'tag');
@@ -366,6 +382,68 @@ describe("HTML5 parse", () => {
 	});
 
 
+	describe("Scripts", () => {
+		const doc2 = `<script>
+		document.write('<script>bouh</script>');
+		document.write('<script>"bouh\\'</script>');
+		document.write("<script>bouh</script>");
+		document.write("<script>'bouh\\"</script>");
+		</script><script></script>`;
+		const res = parser.parse(doc2, 'fragment');
+
+		it("should", () => {
+			expect(res).to.deep.equals({
+				childNodes: [{
+					nodeName: "script",
+					content: "\n\t\tdocument.write('<script>bouh</script>');\n\t\tdocument.write('<script>\"bouh\\'</script>');\n\t\tdocument.write(\"<script>bouh</script>\");\n\t\tdocument.write(\"<script>'bouh\\\"</script>\");\n\t\t"
+				},
+				{
+					nodeName: "script",
+					content: ""
+				}
+				]
+			});
+		});
+	});
+
+
+	describe("Scripts with comment with unique single quote", () => {
+		const doc2 = `<script>
+		var a = 2; // this doesn't work
+		</script>`;
+		const res = parser.parse(doc2, 'fragment');
+
+		it("should", () => {
+			expect(res).to.deep.equals({
+				childNodes: [{
+					nodeName: "script",
+					content: "\n\t\tvar a = 2; // this doesn't work\n\t\t"
+				}
+				]
+			});
+		});
+	});
+
+	describe("Style", () => {
+		const doc2 = `<style>
+			#fixture {
+				position: absolute;
+				top: -9999;
+				left: -9999;
+			}
+		</style>`;
+		const res = parser.parse(doc2, 'fragment');
+
+		it("should", () => {
+			expect(res).to.deep.equals({
+				childNodes: [{
+					nodeName: "style",
+					content: "\n\t\t\t#fixture {\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -9999;\n\t\t\t\tleft: -9999;\n\t\t\t}\n\t\t"
+				}]
+			});
+		});
+	});
+
 	describe("comment with nested comment", () => {
 		const res = parser.parse(`
 	<!-- hop --><template><!-- hip --></template>
@@ -391,7 +469,8 @@ describe("HTML5 parse", () => {
 				{
 					nodeName: '#text',
 					value: '\n'
-				}]
+				}
+				]
 			});
 		});
 	});
@@ -454,31 +533,21 @@ describe("HTML5 parse", () => {
 		});
 	});
 
-	describe("Scripts", () => {
-		const doc2 = `<script>
-		document.write('<script>bouh</script>');
-		document.write('<script>"bouh\\'</script>');
-		document.write("<script>bouh</script>");
-		document.write("<script>'bouh\\"</script>");
-		</script><script></script>`;
-		const res = parser.parse(doc2, 'fragment');
-
+	describe("fragment with style followed by script", () => {
+		const doc = `<style></style><script>mocha.setup("bdd");</script>`;
+		const res = parser.parse(doc, 'fragment');
 		it("should", () => {
 			expect(res).to.deep.equals({
 				childNodes: [{
-					nodeName: "script",
-					content: "\n\t\tdocument.write('<script>bouh</script>');\n\t\tdocument.write('<script>\"bouh\\'</script>');\n\t\tdocument.write(\"<script>bouh</script>\");\n\t\tdocument.write(\"<script>'bouh\\\"</script>\");\n\t\t"
-				},
-				{
-					nodeName: "script",
-					content: ""
-				}
-				]
+					content: "",
+					nodeName: "style"
+				}, {
+					content: "mocha.setup(\"bdd\");",
+					nodeName: "script"
+				}]
 			});
 		});
 	});
-
-
 
 	describe("document", () => {
 		// from elenpi/index.html (mocha tests index for browser)
@@ -646,7 +715,8 @@ describe("HTML5 parse", () => {
 						{
 							nodeName: "#text",
 							value: "\n\t"
-						}]
+						}
+						]
 					},
 					{
 						nodeName: "#text",
@@ -678,7 +748,8 @@ describe("HTML5 parse", () => {
 							{
 								nodeName: "#text",
 								value: " tests"
-							}]
+							}
+							]
 						},
 						{
 							nodeName: "#text",
