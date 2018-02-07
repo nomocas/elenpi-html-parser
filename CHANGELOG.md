@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/nomocas/elenpi-html-parser/compare/v1.5.0...v1.5.1) (2018-02-07)
+
+
+### Bug Fixes
+
+* **inner-script:** manage single double-quote or single single-quote in raw content ([6678e64](https://github.com/nomocas/elenpi-html-parser/commit/6678e64))
+* **tag-end:** produce real error when tag is baldy closed ([57fd4c8](https://github.com/nomocas/elenpi-html-parser/commit/57fd4c8))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/nomocas/elenpi-html-parser/compare/v1.4.0...v1.5.0) (2018-01-25)
 
