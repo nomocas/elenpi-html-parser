@@ -8,6 +8,9 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "engines":{
+    "node": ">=6.0.0"
+  },
   "scripts": {
     "lint": "eslint src test",
     "prebuild": "npm run lint",
