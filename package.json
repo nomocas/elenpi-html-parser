@@ -1,6 +1,6 @@
 {
   "name": "elenpi-html-parser",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Simplest, lightest, most understandable and tweakable html-parser",
   "main": "dist/bundles/index.js",
   "module": "dist/bundles/index.mjs",
@@ -8,7 +8,7 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "engines":{
+  "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
