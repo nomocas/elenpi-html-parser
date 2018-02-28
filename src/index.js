@@ -111,7 +111,7 @@ const rules = {
 				r.terminal(/^(\/(?!>)|[^\s\/])+/, (env, obj, cap) => {
 					obj.value = cap[0];
 					obj.directValue = true;
-				}),
+				})
 			]
 		}),
 
@@ -125,13 +125,39 @@ const rules = {
 	innerScript: r
 		.zeroOrMore(
 			r.oneOf(
-				'textWithoutQuotesOrTags',
+				'textWithoutQuotesOrTagsOrComments',
+				'jsComment',
+				'jsComment2',
 				'doublestring', 
 				'singlestring', 
-				'templatestring', 
-				r.terminal(/^['"`]/, (env, descriptor, cap) => descriptor.content += cap[0])
+				'templatestring',
+				r.terminal(/^['"`\/]/, (env, descriptor, cap) => descriptor.content += cap[0])
 			)
 		),
+
+	textWithoutQuotesOrTagsOrComments: r
+		.terminal(/^([^'"`<\/]|<(?!\/)|\/(?![\/\*]))+/, (env, obj, cap) => {
+			if (obj.content)
+				obj.content += cap[0];
+			else
+				obj.content = cap[0];
+		}),
+
+	jsComment: r
+		.terminal(/^\/\/[^\n]*/, (env, obj, cap) => {
+			if (obj.content)
+				obj.content += cap[0];
+			else
+				obj.content = cap[0];
+		}),
+
+	jsComment2: r
+		.terminal(/^\/\*.*(?=\*\/)/, (env, obj, cap) => {
+			if (obj.content)
+				obj.content += cap[0];
+			else
+				obj.content = cap[0];
+		}),
 
 	textWithoutQuotesOrTags: r
 		.terminal(/^([^'"`<]|<(?!\/))+/, (env, obj, cap) => {

@@ -424,6 +424,25 @@ describe("HTML5 parse", () => {
 		});
 	});
 
+	describe("Scripts with tags and comment with unique single quote", () => {
+		const doc2 = `<script>
+		// we add it late because it's 150k to load
+		var b = '<div></div>';
+		</script>`;
+		const res = parser.parse(doc2, 'fragment');
+
+		it("should", () => {
+			expect(res).to.deep.equals({
+				childNodes: [{
+					nodeName: "script",
+					content: "\n\t\t// we add it late because it's 150k to load\n\t\tvar b = '<div></div>';\n\t\t"
+				}
+				]
+			});
+		});
+	});
+
+
 	describe("Style", () => {
 		const doc2 = `<style>
 			#fixture {
